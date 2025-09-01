@@ -17,7 +17,7 @@ export const actions = {
 
 		redirect(302, '/');
 	},
-    
+
 	deleteAccount: async ({ locals, cookies }) => {
 		if (!locals.user) {
 			redirect(302, '/');

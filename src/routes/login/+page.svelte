@@ -1,44 +1,37 @@
+<!-- routes/login/+page.svelte -->
 <script>
 	import { enhance } from '$app/forms';
-    let { form } = $props();
+	import { Button } from '$lib/components/ui/button';
+	import { Input } from '$lib/components/ui/input';
+	import { Label } from '$lib/components/ui/label';
+	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+
+	let { form } = $props();
 </script>
 
-<div class="flex justify-center items-center min-h-screen bg-gray-100">
-	<form
-		action="?/login"
-		method="POST"
-		use:enhance
-		class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md"
-	>
-		<h1 class="text-2xl font-bold text-gray-800 mb-4">Login</h1>
-
-		<label for="email" class="block text-gray-700">E-Mail</label>
-		<input
-			type="text"
-			name="email"
-			id="email"
-			required
-			class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-		/>
-
-		<label for="password" class="block text-gray-700">Password</label>
-		<input
-			type="password"
-			name="password"
-			id="password"
-			required
-			class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-		/>
-
-
-		<button type="submit" class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600"
-			>Login</button
-		>
-
-		<p>No account? <a href="/sign_up" class="text-blue-500">Create one</a></p>
-
-	</form>
-    {#if form}
-      <h1>{form.message}</h1>
-    {/if}
+<div class="flex min-h-screen items-center justify-center bg-gray-100">
+	<Card class="w-full max-w-md">
+		<CardHeader>
+			<CardTitle class="text-2xl font-bold">Login</CardTitle>
+		</CardHeader>
+		<CardContent>
+			<form action="?/login" method="POST" use:enhance class="space-y-4">
+				<div class="space-y-2">
+					<Label for="email">E-Mail</Label>
+					<Input type="text" name="email" id="email" required />
+				</div>
+				<div class="space-y-2">
+					<Label for="password">Password</Label>
+					<Input type="password" name="password" id="password" required />
+				</div>
+				<Button type="submit" class="w-full" variant="default">Login</Button>
+				<p class="text-center text-sm text-muted-foreground">
+					No account? <a href="/sign_up" class="text-primary hover:underline">Create one</a>
+				</p>
+			</form>
+			{#if form?.message}
+				<p class="mt-4 text-center text-sm text-destructive">{form.message}</p>
+			{/if}
+		</CardContent>
+	</Card>
 </div>
