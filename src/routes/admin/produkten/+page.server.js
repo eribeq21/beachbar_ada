@@ -1,7 +1,7 @@
 // src/routes/products/+page.server.js
 import { redirect, error } from '@sveltejs/kit';
 import { createConnection } from '$lib/db/mysql';
-import { BLOB_READ_WRITE_TOKEN } from '$env/static/private';
+import { BLOB_READ_WRITE_TOKEN } from '$env/dynamic/private';
 import { put } from '@vercel/blob';
 
 export async function load({ locals }) {
