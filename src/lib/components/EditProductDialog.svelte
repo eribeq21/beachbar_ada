@@ -1,136 +1,126 @@
 <script>
 	import { enhance } from '$app/forms';
-	import {
-		Dialog,
-		DialogContent,
-		DialogDescription,
-		DialogFooter,
-		DialogHeader,
-		DialogTitle
-	} from '$lib/components/ui/dialog';
-	import { Input } from '$lib/components/ui/input';
-	import { Label } from '$lib/components/ui/label';
-	import * as Select from '$lib/components/ui/select';
-	import { Button } from '$lib/components/ui/button';
+	import { page } from '$app/stores';
 
-	let { open = $bindable(), product } = $props();
-
-	let formData = $state({
-		id: '',
-		name: '',
-		description: '',
-		price: '',
-		category: '',
-		image: null
-	});
-
-	$effect(() => {
-		if (product) {
-			formData = {
-				id: product.id,
-				name: product.name,
-				description: product.description,
-				price: product.price.toString(),
-				category: product.category,
-				image: null
-			};
-		}
-	});
-
-	function handleFileChange(event) {
-		formData.image = event.target.files[0];
-	}
-
-	function resetForm() {
-		formData = {
-			id: '',
-			name: '',
-			description: '',
-			price: '',
-			category: '',
-			image: null
-		};
-	}
-
-	// Category options
-	const categoryOptions = [
-		{ value: 'drink', label: 'Drink' },
-		{ value: 'cocktail', label: 'Cocktail' },
-		{ value: 'food', label: 'Food' },
-		{ value: 'snack', label: 'Snack' },
-		{ value: 'other', label: 'Other' }
-	];
-
-	const selectedCategoryLabel = $derived(
-		categoryOptions.find((option) => option.value === formData.category)?.label ??
-			'Kategorie auswählen'
-	);
+	let { product, open, categories } = $props();
 </script>
 
-<Dialog bind:open onClose={resetForm}>
-	<DialogContent>
-		<DialogHeader>
-			<DialogTitle>Produkt bearbeiten</DialogTitle>
-			<DialogDescription>Ändern Sie die Details des Produkts.</DialogDescription>
-		</DialogHeader>
-		<form
-			action="?/update"
-			method="POST"
-			use:enhance={() => {
-				return async ({ result, update }) => {
-					if (result.type === 'success') {
-						open = false;
-						resetForm();
-					}
-					await update();
-				};
-			}}
-			class="space-y-4"
-			enctype="multipart/form-data"
-		>
-			<input type="hidden" name="id" value={formData.id} />
-			<div class="space-y-2">
-				<Label for="name">Name</Label>
-				<Input id="name" name="name" bind:value={formData.name} required />
-			</div>
-			<div class="space-y-2">
-				<Label for="description">Beschreibung</Label>
-				<Input id="description" name="description" bind:value={formData.description} required />
-			</div>
-			<div class="space-y-2">
-				<Label for="price">Preis</Label>
-				<Input
-					id="price"
-					name="price"
-					type="number"
-					step="0.01"
-					bind:value={formData.price}
-					required
-				/>
-			</div>
-			<div class="space-y-2">
-				<Label for="category">Kategorie</Label>
-				<Select.Root bind:value={formData.category} name="category">
-					<Select.Trigger class="w-full">
-						{selectedCategoryLabel}
-					</Select.Trigger>
-					<Select.Content>
-						{#each categoryOptions as option (option.value)}
-							<Select.Item value={option.value} label={option.label}>
-								{option.label}
-							</Select.Item>
-						{/each}
-					</Select.Content>
-				</Select.Root>
-				<input type="hidden" name="category" value={formData.category} />
-			</div>
-			<div class="space-y-2">
-				<Label for="image">Neues Bild (optional)</Label>
-				<Input id="image" name="image" type="file" accept="image/*" on:change={handleFileChange} />
-			</div>
-			<DialogFooter>
-				<Button type="submit">Speichern</Button>
-			</DialogFooter>
-		</form>
-	</DialogContent>
-</Dialog>
+{#if open}
+	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+		<div class="mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+			<h3 class="mb-4 text-lg font-semibold text-gray-900">Produkt bearbeiten</h3>
+			<form
+				action="?/update"
+				method="POST"
+				enctype="multipart/form-data"
+				use:enhance={() => {
+					return async ({ result, update }) => {
+						if (result.type === 'success') {
+							open = false;
+						}
+						await update();
+					};
+				}}
+			>
+				<input type="hidden" name="id" value={product.id} />
+				<input type="hidden" name="current_image" value={product.image_url} />
+				<div class="space-y-4">
+					<div>
+						<label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+						<input
+							type="text"
+							id="name"
+							name="name"
+							value={product.name}
+							required
+							class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						/>
+					</div>
+					<div>
+						<label for="description" class="block text-sm font-medium text-gray-700"
+							>Beschreibung</label
+						>
+						<textarea
+							id="description"
+							name="description"
+							class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+							>{product.description}</textarea
+						>
+					</div>
+					<div>
+						<label for="price" class="block text-sm font-medium text-gray-700">Preis (€)</label>
+						<input
+							type="number"
+							step="0.01"
+							id="price"
+							name="price"
+							value={product.price}
+							required
+							class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						/>
+					</div>
+					<div>
+						<label for="category_id" class="block text-sm font-medium text-gray-700"
+							>Kategorie</label
+						>
+						<select
+							id="category_id"
+							name="category_id"
+							value={product.category_id}
+							required
+							class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						>
+							{#each categories as cat}
+								<option value={cat.id}
+									>{cat.name.charAt(0).toUpperCase() + cat.name.slice(1)}</option
+								>
+							{/each}
+						</select>
+					</div>
+					<div>
+						<label for="available" class="flex items-center">
+							<input
+								type="checkbox"
+								id="available"
+								name="available"
+								checked={product.available}
+								class="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+							/>
+							<span class="text-sm font-medium text-gray-700">Verfügbar</span>
+						</label>
+					</div>
+					<div>
+						<label for="image" class="block text-sm font-medium text-gray-700"
+							>Neues Bild (optional)</label
+						>
+						<input
+							type="file"
+							id="image"
+							name="image"
+							accept="image/*"
+							class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+						/>
+						{#if product.image_url}
+							<img src={product.image_url} alt="Current" class="mt-2 h-20 w-auto rounded-md" />
+						{/if}
+					</div>
+				</div>
+				<div class="mt-6 flex justify-end space-x-3">
+					<button
+						type="button"
+						onclick={() => (open = false)}
+						class="rounded-md border border-gray-300 px-4 py-2 text-sm transition hover:bg-gray-50"
+					>
+						Abbrechen
+					</button>
+					<button
+						type="submit"
+						class="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition hover:bg-blue-700"
+					>
+						Speichern
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+{/if}
