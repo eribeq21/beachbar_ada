@@ -26,7 +26,7 @@
 
 	<!-- Logout Button at Bottom -->
 	<div class="border-t border-gray-700 p-4">
-		<form action="/logout" method="POST" use:enhance>
+		<form action="/logout?/logout" method="POST" use:enhance>
 			<button
 				type="submit"
 				class="w-full rounded-lg bg-red-600 px-3 py-2 transition hover:bg-red-700"
