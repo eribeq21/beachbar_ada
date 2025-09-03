@@ -85,12 +85,10 @@
 		<div class="absolute -bottom-8 left-20 w-72 h-72 bg-gradient-to-r from-blue-300 to-indigo-400 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
 	</div>
 
-	<!-- Dramatically enhanced hero section with better typography and effects -->
-	<header class="relative h-[70vh] bg-cover bg-center overflow-hidden" style="background-image: url('/restaurant-hero.jpg');">
+	<header class="relative h-[70vh] bg-cover bg-center overflow-hidden" style="background-image: url('https://dynamic-media-cdn.tripadvisor.com/media/photo-o/30/15/eb/c7/the-best-beach-bar-in.jpg?w=900&h=500&s=1');">
 		<div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
 		<div class="absolute inset-0 bg-gradient-to-r from-rose-900/20 to-amber-900/20"></div>
 		
-		<!-- Floating elements -->
 		<div class="absolute top-1/4 left-1/4 w-2 h-2 bg-white/60 rounded-full animate-float"></div>
 		<div class="absolute top-1/3 right-1/3 w-1 h-1 bg-white/40 rounded-full animate-float animation-delay-1000"></div>
 		<div class="absolute bottom-1/3 left-1/5 w-3 h-3 bg-white/30 rounded-full animate-float animation-delay-2000"></div>
@@ -114,7 +112,6 @@
 		</div>
 	</header>
 
-	<!-- Enhanced sticky navigation with better visual feedback -->
 	<nav class="sticky top-0 bg-white/90 backdrop-blur-md shadow-lg z-30 py-4 border-b border-gray-200/50">
 		<div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-wrap justify-center gap-3">
 			{#each categories as cat}
@@ -132,13 +129,11 @@
 		</div>
 	</nav>
 
-	<!-- Enhanced menu sections with better spacing and visual hierarchy -->
 	<div class="py-16 px-4 sm:px-8 relative z-10">
 		{#each categories as cat}
 			{#if groupedProducts[cat].length > 0}
 				{@const colors = categoryColors[cat] || categoryColors.default}
 				<section id={cat} class="mb-20 max-w-7xl mx-auto scroll-mt-24">
-					<!-- Enhanced section headers with decorative elements -->
 					<div class="text-center mb-12">
 						<div class="inline-flex items-center gap-4 mb-4">
 							<div class="w-12 h-0.5 bg-gradient-to-r {colors.bg} rounded-full"></div>
@@ -153,14 +148,12 @@
 						</p>
 					</div>
 					
-					<!-- Enhanced product grid with staggered animations -->
 					<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 						{#each groupedProducts[cat] as product, index}
 							<div 
 								class="group relative overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border {colors.border} animate-fade-in-up"
 								style="animation-delay: {index * 100}ms"
 							>
-								<!-- Enhanced image container with overlay effects -->
 								<div class="relative overflow-hidden">
 									<img
 										src={product.image_url || '/placeholder.svg?height=200&width=300&query=delicious food dish'}
@@ -173,7 +166,6 @@
 									</div>
 								</div>
 								
-								<!-- Enhanced content area with better typography -->
 								<div class="p-6 bg-gradient-to-b from-white to-gray-50/50">
 									<h3 class="text-xl font-bold text-gray-900 group-hover:{colors.text} transition-colors duration-300 mb-2 leading-tight">
 										{product.name}
@@ -210,7 +202,6 @@
 		{/if}
 	</div>
 
-	<!-- Enhanced footer with better visual appeal -->
 	<footer class="relative bg-gradient-to-r from-slate-900 via-gray-900 to-slate-900 text-white py-16 overflow-hidden">
 		<div class="absolute inset-0 bg-gradient-to-r from-rose-900/20 to-amber-900/20"></div>
 		<div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-8">
@@ -240,7 +231,6 @@
 </div>
 
 <style>
-	/* Enhanced animations with more sophisticated effects */
 	@keyframes fade-in-down {
 		0% { opacity: 0; transform: translateY(-30px); }
 		100% { opacity: 1; transform: translateY(0); }
